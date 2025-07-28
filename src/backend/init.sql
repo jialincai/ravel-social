@@ -40,7 +40,7 @@ CREATE TABLE photos (
 );
 
 CREATE TABLE photos_to_tags (
-  photo_id UUID NOT NULL REFERENCES photo_entries(id) ON DELETE CASCADE,
+  photo_id UUID NOT NULL REFERENCES photos(id) ON DELETE CASCADE,
   tag_id UUID NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
   PRIMARY KEY (photo_id, tag_id)
 );
@@ -55,19 +55,19 @@ CREATE TABLE suggestions (
 );
 
 CREATE TABLE suggestions_to_tags (
-  proposal_id UUID NOT NULL REFERENCES event_proposals(id) ON DELETE CASCADE,
+  proposal_id UUID NOT NULL REFERENCES suggestions(id) ON DELETE CASCADE,
   tag_id UUID NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
   PRIMARY KEY (proposal_id, tag_id)
 );
 
 CREATE TABLE suggestions_to_photos (
-  proposal_id UUID NOT NULL REFERENCES event_proposals(id) ON DELETE CASCADE,
-  photo_id UUID NOT NULL REFERENCES photo_entries(id) ON DELETE CASCADE,
+  proposal_id UUID NOT NULL REFERENCES suggestions(id) ON DELETE CASCADE,
+  photo_id UUID NOT NULL REFERENCES photos(id) ON DELETE CASCADE,
   PRIMARY KEY (proposal_id, photo_id)
 );
 
 CREATE TABLE suggestions_to_users (
-  proposal_id UUID NOT NULL REFERENCES event_proposals(id) ON DELETE CASCADE,
+  proposal_id UUID NOT NULL REFERENCES suggestions(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   status TEXT NOT NULL CHECK (status IN ('pending', 'accepted', 'rejected')),
   responded_at TIMESTAMPTZ,
@@ -76,7 +76,7 @@ CREATE TABLE suggestions_to_users (
 
 CREATE TABLE events (
   id UUID PRIMARY KEY, -- UUIDv7 generated app-side
-  proposal_id UUID REFERENCES event_proposals(id) ON DELETE SET NULL,
+  proposal_id UUID REFERENCES suggestions(id) ON DELETE SET NULL,
   creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   activity_id UUID NOT NULL REFERENCES activities(id),
   scheduled_time TIMESTAMPTZ NOT NULL,
