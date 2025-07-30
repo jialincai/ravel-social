@@ -1,9 +1,11 @@
+CREATE EXTENSION IF NOT EXISTS citext;
 CREATE EXTENSION IF NOT EXISTS postgis;
 
 CREATE TABLE users (
   id UUID PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
-  display_name TEXT NOT NULL
+  display_name TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE friendships (
@@ -16,78 +18,84 @@ CREATE TABLE friendships (
   CONSTRAINT user_order CHECK (user_a < user_b)
 );
 
+CREATE TABLE inputs (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  raw_text TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  extracted_at TIMESTAMPTZ,
+  processed BOOLEAN DEFAULT FALSE
+);
+
 CREATE TABLE tags (
-  id UUID PRIMARY KEY, -- UUIDv7 generated app-side
-  name TEXT UNIQUE NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT now()
-  CHECK (name = LOWER(name))
-);
-
-CREATE TABLE activities (
-  id UUID PRIMARY KEY, -- UUIDv7 generated app-side
-  name TEXT UNIQUE NOT NULL,
+  id UUID PRIMARY KEY,
+  name CITEXT UNIQUE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE TABLE photos (
-  id UUID PRIMARY KEY, -- UUIDv7 generated app-side
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  uri TEXT NOT NULL, -- Mock with LAN IP (e.g. 192.168.x.x/photos/abc.jpg)
-  timestamp TIMESTAMPTZ NOT NULL,
-  location GEOGRAPHY(Point, 4326) NOT NULL,
-
-  CONSTRAINT photo_per_hour_per_user UNIQUE (user_id, timestamp)
+CREATE TABLE inputs_to_tags (
+  input_id UUID REFERENCES inputs(id) ON DELETE CASCADE,
+  tag_id UUID REFERENCES tags(id) ON DELETE CASCADE,
+  PRIMARY KEY (input_id, tag_id)
 );
 
-CREATE TABLE photos_to_tags (
-  photo_id UUID NOT NULL REFERENCES photos(id) ON DELETE CASCADE,
-  tag_id UUID NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
-  PRIMARY KEY (photo_id, tag_id)
+CREATE TABLE apps (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE users_to_apps (
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  app_id UUID REFERENCES apps(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, app_id)
+);
+
+CREATE TABLE timeslots (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  app_id UUID REFERENCES apps(id) ON DELETE CASCADE,
+  started_at TIMESTAMPTZ NOT NULL,
+  ended_at TIMESTAMPTZ NOT NULL,
+  location GEOGRAPHY(Point, 4326)
+  CHECK (started_at < ended_at)
 );
 
 CREATE TABLE suggestions (
   id UUID PRIMARY KEY,
-  activity_id UUID NOT NULL REFERENCES activities(id),
-  matched_time TSTZRANGE NOT NULL, -- e.g. ['2025-07-28 12:00+00', '2025-07-28 14:00+00')
-  matched_location GEOGRAPHY(Point, 4326) NOT NULL, -- center point
-  location_radius_m INTEGER NOT NULL DEFAULT 500, -- meters (500m = ~5-10 block range)
-  created_at TIMESTAMPTZ DEFAULT now()
+  raw_text TEXT NOT NULL,
+  scheduled_time TIMESTAMPTZ,
+  location GEOGRAPHY(Point, 4326),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE suggestions_to_tags (
-  proposal_id UUID NOT NULL REFERENCES suggestions(id) ON DELETE CASCADE,
-  tag_id UUID NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
-  PRIMARY KEY (proposal_id, tag_id)
-);
-
-CREATE TABLE suggestions_to_photos (
-  proposal_id UUID NOT NULL REFERENCES suggestions(id) ON DELETE CASCADE,
-  photo_id UUID NOT NULL REFERENCES photos(id) ON DELETE CASCADE,
-  PRIMARY KEY (proposal_id, photo_id)
+  suggestion_id UUID REFERENCES suggestions(id) ON DELETE CASCADE,
+  tag_id UUID REFERENCES tags(id) ON DELETE CASCADE,
+  PRIMARY KEY (suggestion_id, tag_id)
 );
 
 CREATE TABLE suggestions_to_users (
-  proposal_id UUID NOT NULL REFERENCES suggestions(id) ON DELETE CASCADE,
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  status TEXT NOT NULL CHECK (status IN ('pending', 'accepted', 'rejected')),
-  responded_at TIMESTAMPTZ,
-  PRIMARY KEY (proposal_id, user_id)
+  suggestion_id UUID REFERENCES suggestions(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  feedback TEXT CHECK (feedback IN ('like', 'dislike')),
+  PRIMARY KEY (suggestion_id, user_id)
 );
 
 CREATE TABLE events (
-  id UUID PRIMARY KEY, -- UUIDv7 generated app-side
-  proposal_id UUID REFERENCES suggestions(id) ON DELETE SET NULL,
-  creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  activity_id UUID NOT NULL REFERENCES activities(id),
+  id UUID PRIMARY KEY,
+  suggestion_id UUID NOT NULL REFERENCES suggestions(id) ON DELETE CASCADE,
   scheduled_time TIMESTAMPTZ NOT NULL,
   location GEOGRAPHY(Point, 4326) NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT now()
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE events_to_users (
   event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  status TEXT NOT NULL CHECK (status IN ('invited', 'accepted', 'declined', 'maybe')),
+  status TEXT CHECK (status IN ('accepted', 'declined', 'tentative')),
   responded_at TIMESTAMPTZ,
   PRIMARY KEY (event_id, user_id)
 );
