@@ -1,9 +1,18 @@
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme();
+
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        headerShown: true,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
