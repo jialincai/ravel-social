@@ -40,7 +40,7 @@ A mobile app built with React Native using Expo. It prompts users to take photos
 1. Start the development server
 
    ```
-   npx expo start --tunnel
+   npm run start:tunnel
    ```
 
 1. In the terminal, press s to switch to GO mode if needed
@@ -92,4 +92,12 @@ A mobile app built with React Native using Expo. It prompts users to take photos
 
    ```
    docker compose down
+   ```
+
+### Linting
+
+1. Automatically apply lint fixes.
+
+   ```
+   npm run lint:fix
    ```

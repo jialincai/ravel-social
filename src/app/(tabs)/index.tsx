@@ -1,15 +1,10 @@
-import { Text, View } from "react-native";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
-export default function HomeScreen() {
+export default function InboxScreen() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>This is the HomeScreen</Text>
-    </View>
+    <ThemedView>
+      <ThemedText>This is the HomeScreen</ThemedText>
+    </ThemedView>
   );
 }
