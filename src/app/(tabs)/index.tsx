@@ -1,16 +1,17 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   FlatList,
   NativeSyntheticEvent,
-  TextInputSubmitEditingEventData,
+  Pressable,
   StyleSheet,
   TextInput,
+  TextInputSubmitEditingEventData,
 } from "react-native";
 import { uuidv7 } from "uuidv7";
-import { Bullet } from "@/components/Bullet";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
+import { Row } from "@/components/Row";
 
 type Item = { id: string; raw_text: string };
 
@@ -18,42 +19,45 @@ export default function InboxScreen() {
   const inputRef = useRef<TextInput>(null);
   const [items, setItems] = useState<Item[]>([]);
 
-  function handleSubmit(
-    e: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
-  ) {
-    const text = e.nativeEvent.text.trim();
-    if (text.length === 0) return;
+  const handleSubmit = useCallback((raw_text: string) => {
+    const text = raw_text.trim();
+    if (!text) return;
 
-    const newItem = {
-      id: uuidv7(),
-      raw_text: text,
-    };
+    setItems((prev) => [...prev, { id: uuidv7(), raw_text: text }]);
 
-    setItems((prev) => [...prev, newItem]);
     inputRef.current?.clear();
-  }
+  }, []);
+
+  const handleDelete = useCallback((delete_id: string) => {
+    setItems((prev) => prev.filter((item) => item.id !== delete_id));
+  }, []);
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title" style={styles.title}>
-        Got an idea for a good time? Drop it here.
+      <ThemedText type="subtitle" style={styles.title}>
+        Got an idea for a good time?
       </ThemedText>
       <ThemedTextInput
         ref={inputRef}
         placeholder="I want to..."
         placeholderTextColor="gray"
-        onSubmitEditing={handleSubmit}
+        onSubmitEditing={(
+          e: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
+        ) => handleSubmit(e.nativeEvent.text)}
         style={styles.input}
       />
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Bullet style={styles.bullet}>
-            <ThemedTextInput>{item.raw_text}</ThemedTextInput>
-          </Bullet>
-        )}
         contentContainerStyle={styles.list}
+        renderItem={({ item }) => (
+          <Row>
+            <ThemedText style={styles.bullet}>• {item.raw_text}</ThemedText>
+            <Pressable onPress={() => handleDelete(item.id)}>
+              <ThemedText style={styles.deleteButton}>✕</ThemedText>
+            </Pressable>
+          </Row>
+        )}
       />
     </ThemedView>
   );
@@ -63,21 +67,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    gap: 20,
   },
   title: {
-    marginBottom: 8,
+    marginBottom: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "white",
     borderRadius: 8,
     padding: 10,
   },
   list: {
-    paddingTop: 12,
+    paddingTop: 40,
+    gap: 8,
   },
   bullet: {
-    marginBottom: 8,
+    flex: 1,
+  },
+  deleteButton: {
+    paddingHorizontal: 10,
+    color: "red",
   },
 });
