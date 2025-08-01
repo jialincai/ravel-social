@@ -9,18 +9,19 @@ import { ThemedSafeAreaView } from "@/components/ThemedSafeAreaView";
 const Tab = createMaterialTopTabNavigator();
 
 export default function InboxLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() ?? "light";
+  const {
+    tabIconDefault: inactiveTintColor,
+    tabIconSelected: activeTintColor,
+  } = Colors[colorScheme];
 
   return (
     <ThemedSafeAreaView style={{ flex: 1 }}>
       <Tab.Navigator
         screenOptions={{
-          tabBarInactiveTintColor:
-            Colors[colorScheme ?? "light"].tabIconDefault,
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tabIconSelected,
-          tabBarIndicatorStyle: {
-            backgroundColor: Colors[colorScheme ?? "light"].tabIconSelected,
-          },
+          tabBarInactiveTintColor: inactiveTintColor,
+          tabBarActiveTintColor: activeTintColor,
+          tabBarIndicatorStyle: { backgroundColor: activeTintColor },
         }}
       >
         <Tab.Screen name="For You" component={ForYouScreen} />
