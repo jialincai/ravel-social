@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "white",
     borderRadius: 8,
     padding: 10,
   },
