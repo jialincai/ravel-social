@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { uuidv7 } from "uuidv7";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
+import { ThemedSafeAreaView } from "@/components/ThemedSafeAreaView";
 import { Row } from "@/components/Row";
 
 type Item = { id: string; raw_text: string };
@@ -33,7 +33,7 @@ export default function InboxScreen() {
   }, []);
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedSafeAreaView style={styles.container}>
       <ThemedText type="subtitle" style={styles.title}>
         Got an idea for a good time?
       </ThemedText>
@@ -59,7 +59,7 @@ export default function InboxScreen() {
           </Row>
         )}
       />
-    </ThemedView>
+    </ThemedSafeAreaView>
   );
 }
 

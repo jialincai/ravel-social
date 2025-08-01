@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
-export default function InboxScreen() {
+export default function ForYouScreen() {
   return (
     <ThemedView
       style={{
@@ -10,7 +10,7 @@ export default function InboxScreen() {
         alignItems: "center",
       }}
     >
-      <ThemedText>This is the InboxScreen</ThemedText>
+      <ThemedText>This is the ForYouScreen</ThemedText>
     </ThemedView>
   );
 }
