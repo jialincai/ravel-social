@@ -6,17 +6,17 @@ import { Colors } from "@/constants/Colors";
 
 export type ButtonRowProps = {
   buttons: { label: string; onPress: () => void; style?: ViewStyle }[];
-  selectedLabel?: string;
+  selected?: string;
   style?: ViewStyle;
 };
 
-export function ButtonRow({ buttons, selectedLabel, style }: ButtonRowProps) {
+export function ButtonRow({ buttons, selected, style }: ButtonRowProps) {
   const colorScheme = useColorScheme() ?? "light";
 
   return (
     <Row style={style}>
       {buttons.map((btn, idx) => {
-        const isSelected = btn.label === selectedLabel;
+        const isSelected = btn.label === selected;
         return (
           <Pressable
             key={btn.label}

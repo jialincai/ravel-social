@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { User } from "@/types";
@@ -7,6 +8,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { Row } from "@/components/Row";
 import { Card } from "@/components/Card";
 import { ButtonRow } from "@/components/ButtonRow";
+import { Chip } from "@/components/Chip";
 
 export default function ForYouScreen() {
   const colorScheme = useColorScheme() ?? "light";
@@ -45,23 +47,18 @@ export default function ForYouScreen() {
         <ThemedText type="subtitle">See Wicked on Broadway</ThemedText>
         <Row>
           <IconSymbol
-            name="mappin.and.ellipse"
-            size={18}
-            color={Colors[colorScheme].text}
-            style={{ marginRight: 6 }}
-          />
-          <ThemedText>
-            222 West 51st Street, New York, NY, USA, 10019
-          </ThemedText>
-        </Row>
-        <Row>
-          <IconSymbol
             name="person.2.fill"
             size={18}
             color={Colors[colorScheme].text}
             style={{ marginRight: 6 }}
           />
           <ThemedText>{party.map((i) => i.display_name).join(", ")}</ThemedText>
+        </Row>
+        <ThemedText type="defaultSemiBold">Tags</ThemedText>
+        <Row style={styles.chipContainer}>
+          <Chip label="musical" />
+          <Chip label="live-show" />
+          <Chip label="theater" />
         </Row>
         <ButtonRow
           buttons={[
@@ -77,3 +74,9 @@ export default function ForYouScreen() {
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  chipContainer: {
+    gap:4,
+  }
+});
