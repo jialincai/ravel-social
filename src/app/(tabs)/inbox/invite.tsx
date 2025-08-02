@@ -9,6 +9,8 @@ import { Card } from "@/components/Card";
 import { ButtonRow } from "@/components/ButtonRow";
 import { ClipboardText } from "@/components/ClipboardText";
 
+import { styles } from "@/app/(tabs)/inbox/index";
+
 export default function InviteScreen() {
   const colorScheme = useColorScheme() ?? "light";
 
@@ -35,35 +37,41 @@ export default function InviteScreen() {
   ];
 
   return (
-    <ThemedView
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Card>
-        <ThemedText type="subtitle">Visit the MOMA</ThemedText>
-        <Row>
-          <IconSymbol
-            name="mappin.and.ellipse"
-            size={18}
-            color={Colors[colorScheme].text}
-            style={{ marginRight: 6 }}
-          />
-          <ThemedText>11 W 53rd St, New York, NY 10019</ThemedText>
-        </Row>
-        <Row>
-          <IconSymbol
-            name="clock.fill"
-            size={18}
-            color={Colors[colorScheme].text}
-            style={{ marginRight: 6 }}
-          />
-          <ThemedText>Saturday August 12, 12:00PM-3:00PM</ThemedText>
-        </Row>
-        <ThemedText type="defaultSemiBold">Party</ThemedText>
-        <ClipboardText invitees={invitees} />
+    <ThemedView style={styles.centered}>
+      <Card style={styles.container}>
+        <ThemedView>
+          <ThemedText type="subtitle">Visit the MOMA</ThemedText>
+          <Row>
+            <IconSymbol
+              name="mappin.and.ellipse"
+              size={20}
+              color={Colors[colorScheme].icon}
+              style={styles.icon}
+            />
+            <ThemedText>11 W 53rd St, New York, NY 10019</ThemedText>
+          </Row>
+          <Row>
+            <IconSymbol
+              name="clock.fill"
+              size={20}
+              color={Colors[colorScheme].icon}
+              style={styles.icon}
+            />
+            <ThemedText>Saturday August 12, 12:00PM-3:00PM</ThemedText>
+          </Row>
+        </ThemedView>
+        <ThemedView>
+          <Row style={[styles.sectionHeading, { borderColor: Colors[colorScheme].icon}]}>
+            <IconSymbol
+              name="person.2.fill"
+              size={20}
+              color={Colors[colorScheme].icon}
+              style={styles.icon}
+            />
+            <ThemedText type="subtitle" >Party</ThemedText>
+          </Row>
+          <ClipboardText invitees={invitees} />
+        </ThemedView>
         <ButtonRow
           buttons={[
             {

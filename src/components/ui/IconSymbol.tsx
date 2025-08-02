@@ -27,6 +27,7 @@ const MAPPING = {
   "mappin.and.ellipse": "location-pin",
   "person.2.fill": "people",
   "square.on.square": "content-copy",
+  "tag.fill": "label",
 } as IconMapping;
 
 /**

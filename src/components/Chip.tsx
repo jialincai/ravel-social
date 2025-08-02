@@ -19,7 +19,7 @@ export function Chip({ label, style }: ChipProps) {
       style={[
         styles.chip,
         style,
-        { backgroundColor: Colors[colorScheme].text },
+        { backgroundColor: Colors[colorScheme].tint },
       ]}
     >
       <ThemedText style={[{ color: Colors[colorScheme].background }]}>

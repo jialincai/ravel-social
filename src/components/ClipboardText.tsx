@@ -29,8 +29,8 @@ export function ClipboardText({ invitees, style }: InviteeListProps) {
         <ThemedText>{names.join(", ")}</ThemedText>
         <IconSymbol
           name="square.on.square"
-          size={18}
-          color={Colors[colorScheme].text}
+          size={20}
+          color={Colors[colorScheme].icon}
         />
       </Row>
     </ThemedView>

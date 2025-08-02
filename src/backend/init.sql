@@ -99,3 +99,12 @@ CREATE TABLE events_to_users (
   responded_at TIMESTAMPTZ,
   PRIMARY KEY (event_id, user_id)
 );
+
+-- Consider adding in the future
+-- CREATE TABLE locations (
+--   id UUID PRIMARY KEY,
+--   address TEXT,                  -- "11 W 53rd St, New York, NY 10019"
+--   lat DOUBLE PRECISION NOT NULL,
+--   lng DOUBLE PRECISION NOT NULL,
+--   created_at TIMESTAMPTZ DEFAULT now()
+-- );
