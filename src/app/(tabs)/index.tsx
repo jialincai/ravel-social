@@ -12,18 +12,26 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
 import { ThemedSafeAreaView } from "@/components/ThemedSafeAreaView";
 import { Row } from "@/components/Row";
+import { Input } from "@/types";
 
-type Item = { id: string; raw_text: string };
-
-export default function InboxScreen() {
+export default function HomeScreen() {
   const inputRef = useRef<TextInput>(null);
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<Input[]>([]);
 
   const handleSubmit = useCallback((raw_text: string) => {
     const text = raw_text.trim();
     if (!text) return;
 
-    setItems((prev) => [...prev, { id: uuidv7(), raw_text: text }]);
+    setItems((prev) => [
+      ...prev,
+      {
+        id: uuidv7(),
+        user_id: "dummy_data",
+        raw_text: text,
+        created_at: new Date().toISOString(),
+        processed: false,
+      },
+    ]);
 
     inputRef.current?.clear();
   }, []);
