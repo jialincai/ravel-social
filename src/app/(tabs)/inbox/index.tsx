@@ -1,21 +1,20 @@
-import { User } from "@/types";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+import { StyleSheet } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { User } from "@/types";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { Row } from "@/components/Row";
 import { Card } from "@/components/Card";
 import { ButtonRow } from "@/components/ButtonRow";
-import { ClipboardText } from "@/components/ClipboardText";
+import { Chip } from "@/components/Chip";
 
-import { styles } from "@/app/(tabs)/inbox/index";
-
-export default function InviteScreen() {
+export default function ForYouScreen() {
   const colorScheme = useColorScheme() ?? "light";
 
-  // Example invitee list; replace with real user data
-  const invitees: User[] = [
+  // Example invitee list
+  const party: User[] = [
     {
       id: "1",
       email: "jialin@example.com",
@@ -40,56 +39,41 @@ export default function InviteScreen() {
     <ThemedView style={styles.centered}>
       <Card style={styles.container}>
         <ThemedView>
-          <ThemedText type="subtitle">Visit the MOMA</ThemedText>
+          <ThemedText type="subtitle">
+            See Wicked on Broadway
+          </ThemedText>
           <Row>
-            <IconSymbol
-              name="mappin.and.ellipse"
-              size={20}
-              color={Colors[colorScheme].icon}
-              style={styles.icon}
-            />
-            <ThemedText>11 W 53rd St, New York, NY 10019</ThemedText>
-          </Row>
-          <Row>
-            <IconSymbol
-              name="clock.fill"
-              size={20}
-              color={Colors[colorScheme].icon}
-              style={styles.icon}
-            />
-            <ThemedText>Saturday August 12, 12:00PM-3:00PM</ThemedText>
-          </Row>
-        </ThemedView>
-        <ThemedView>
-          <Row style={[styles.sectionHeading, { borderColor: Colors[colorScheme].icon}]}>
             <IconSymbol
               name="person.2.fill"
               size={20}
               color={Colors[colorScheme].icon}
               style={styles.icon}
             />
-            <ThemedText type="subtitle" >Party</ThemedText>
+            <ThemedText>{party.map((i) => i.display_name).join(", ")}</ThemedText>
           </Row>
-          <ClipboardText invitees={invitees} />
+        </ThemedView>
+        <ThemedView>
+          <Row style={[styles.sectionHeading, {borderColor: Colors[colorScheme].text}]}>
+            <IconSymbol
+              name="tag.fill"
+              size={20}
+              color={Colors[colorScheme].icon}
+              style={styles.icon}
+            />
+            <ThemedText type="subtitle">Tags</ThemedText>
+          </Row>
+          <Row style={styles.tagContainer}>
+            <Chip label="musical" />
+            <Chip label="live-show" />
+            <Chip label="theater" />
+          </Row>
         </ThemedView>
         <ButtonRow
           buttons={[
             {
-              label: "Yes",
+              label: "Like",
               onPress: () => {
-                /* handle yes */
-              },
-            },
-            {
-              label: "Maybe",
-              onPress: () => {
-                /* handle maybe */
-              },
-            },
-            {
-              label: "No",
-              onPress: () => {
-                /* handle no */
+                /* handle like */
               },
             },
           ]}
@@ -98,3 +82,25 @@ export default function InviteScreen() {
     </ThemedView>
   );
 }
+
+export const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  container: {
+    gap: 8
+  },
+  icon: {
+    marginRight: 8
+  },
+  sectionHeading: {
+    borderTopWidth:1,
+    paddingTop: 4,
+    paddingBottom: 8
+  },
+  tagContainer: {
+    gap: 4
+  }
+});
