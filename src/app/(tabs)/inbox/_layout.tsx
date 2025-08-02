@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useColorScheme } from "react-native";
-import ForYouScreen from "./for-you";
+import ForYouScreen from ".";
 import InviteScreen from "./invite";
 import UpcomingScreen from "./upcoming";
 import { Colors } from "@/constants/Colors";
@@ -10,18 +10,16 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function InboxLayout() {
   const colorScheme = useColorScheme() ?? "light";
-  const {
-    tabIconDefault: inactiveTintColor,
-    tabIconSelected: activeTintColor,
-  } = Colors[colorScheme];
 
   return (
     <ThemedSafeAreaView style={{ flex: 1 }}>
       <Tab.Navigator
         screenOptions={{
-          tabBarInactiveTintColor: inactiveTintColor,
-          tabBarActiveTintColor: activeTintColor,
-          tabBarIndicatorStyle: { backgroundColor: activeTintColor },
+          tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
+          tabBarActiveTintColor: Colors[colorScheme].tabIconSelected,
+          tabBarIndicatorStyle: {
+            backgroundColor: Colors[colorScheme].tabIconSelected,
+          },
         }}
       >
         <Tab.Screen name="For You" component={ForYouScreen} />
