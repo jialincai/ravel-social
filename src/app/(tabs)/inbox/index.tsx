@@ -1,19 +1,18 @@
-import { User } from "@/types";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { User } from "@/types";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { Row } from "@/components/Row";
 import { Card } from "@/components/Card";
 import { ButtonRow } from "@/components/ButtonRow";
-import { ClipboardText } from "@/components/ClipboardText";
 
-export default function InviteScreen() {
+export default function ForYouScreen() {
   const colorScheme = useColorScheme() ?? "light";
 
   // Example invitee list; replace with real user data
-  const invitees: User[] = [
+  const party: User[] = [
     {
       id: "1",
       email: "jialin@example.com",
@@ -43,7 +42,7 @@ export default function InviteScreen() {
       }}
     >
       <Card>
-        <ThemedText type="subtitle">Visit the MOMA</ThemedText>
+        <ThemedText type="subtitle">See Wicked on Broadway</ThemedText>
         <Row>
           <IconSymbol
             name="mappin.and.ellipse"
@@ -51,37 +50,25 @@ export default function InviteScreen() {
             color={Colors[colorScheme].text}
             style={{ marginRight: 6 }}
           />
-          <ThemedText>11 W 53rd St, New York, NY 10019</ThemedText>
+          <ThemedText>
+            222 West 51st Street, New York, NY, USA, 10019
+          </ThemedText>
         </Row>
         <Row>
           <IconSymbol
-            name="clock.fill"
+            name="person.2.fill"
             size={18}
             color={Colors[colorScheme].text}
             style={{ marginRight: 6 }}
           />
-          <ThemedText>Saturday August 12, 12:00PM-3:00PM</ThemedText>
+          <ThemedText>{party.map((i) => i.display_name).join(", ")}</ThemedText>
         </Row>
-        <ThemedText type="defaultSemiBold">Party</ThemedText>
-        <ClipboardText invitees={invitees} />
         <ButtonRow
           buttons={[
             {
-              label: "Yes",
+              label: "Like",
               onPress: () => {
-                /* handle yes */
-              },
-            },
-            {
-              label: "Maybe",
-              onPress: () => {
-                /* handle maybe */
-              },
-            },
-            {
-              label: "No",
-              onPress: () => {
-                /* handle no */
+                /* handle like */
               },
             },
           ]}
