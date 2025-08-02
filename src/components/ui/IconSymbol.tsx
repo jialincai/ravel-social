@@ -23,6 +23,10 @@ const MAPPING = {
   "chevron.right": "chevron-right",
   "list.bullet": "format-list-bulleted",
   "envelope.fill": "mail",
+  "clock.fill": "access-time-filled",
+  "mappin.and.ellipse": "location-pin",
+  "person.2.fill": "people",
+  "square.on.square": "content-copy",
 } as IconMapping;
 
 /**
