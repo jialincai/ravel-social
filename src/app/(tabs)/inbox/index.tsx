@@ -1,7 +1,7 @@
-import { StyleSheet } from "react-native";
+import React from "react";
+import { FlatList, StyleSheet } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { User } from "@/types";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -9,76 +9,66 @@ import { Row } from "@/components/Row";
 import { Card } from "@/components/Card";
 import { ButtonRow } from "@/components/ButtonRow";
 import { Chip } from "@/components/Chip";
+import { dummySuggestions } from "@/types/dummy/suggestions";
 
 export default function ForYouScreen() {
   const colorScheme = useColorScheme() ?? "light";
 
-  // Example invitee list
-  const party: User[] = [
-    {
-      id: "1",
-      email: "jialin@example.com",
-      display_name: "Jialin",
-      created_at: "2023-08-01T12:00:00Z",
-    },
-    {
-      id: "2",
-      email: "davis@example.com",
-      display_name: "Davis",
-      created_at: "2023-08-01T12:00:00Z",
-    },
-    {
-      id: "3",
-      email: "tammy@example.com",
-      display_name: "Tammy",
-      created_at: "2023-08-01T12:00:00Z",
-    },
-  ];
-
   return (
-    <ThemedView style={styles.centered}>
-      <Card style={styles.container}>
-        <ThemedView>
-          <ThemedText type="subtitle">
-            See Wicked on Broadway
-          </ThemedText>
-          <Row>
-            <IconSymbol
-              name="person.2.fill"
-              size={20}
-              color={Colors[colorScheme].icon}
-              style={styles.icon}
+    <ThemedView style={{flex:1}}>
+      <FlatList
+        data={dummySuggestions}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Card style={styles.card}>
+            <ThemedView>
+              <ThemedText type="subtitle">{item.raw_text}</ThemedText>
+              <Row>
+                <IconSymbol
+                  name="person.2.fill"
+                  size={20}
+                  color={Colors[colorScheme].icon}
+                  style={styles.icon}
+                />
+                <ThemedText>
+                  {item.users.map((u) => u.user.display_name).join(", ")}
+                </ThemedText>
+              </Row>
+            </ThemedView>
+            <ThemedView>
+              <Row
+                style={[
+                  styles.sectionHeading,
+                  { borderColor: Colors[colorScheme].text },
+                ]}
+              >
+                <IconSymbol
+                  name="tag.fill"
+                  size={20}
+                  color={Colors[colorScheme].icon}
+                  style={styles.icon}
+                />
+                <ThemedText type="subtitle">Tags</ThemedText>
+              </Row>
+              <Row style={styles.tagContainer}>
+                {item.tags.map((tag) => (
+                  <Chip key={tag.id} label={tag.name} />
+                ))}
+              </Row>
+            </ThemedView>
+            <ButtonRow
+              buttons={[
+                {
+                  label: "Like",
+                  onPress: () => {
+                    // handle like
+                  },
+                },
+              ]}
             />
-            <ThemedText>{party.map((i) => i.display_name).join(", ")}</ThemedText>
-          </Row>
-        </ThemedView>
-        <ThemedView>
-          <Row style={[styles.sectionHeading, {borderColor: Colors[colorScheme].text}]}>
-            <IconSymbol
-              name="tag.fill"
-              size={20}
-              color={Colors[colorScheme].icon}
-              style={styles.icon}
-            />
-            <ThemedText type="subtitle">Tags</ThemedText>
-          </Row>
-          <Row style={styles.tagContainer}>
-            <Chip label="musical" />
-            <Chip label="live-show" />
-            <Chip label="theater" />
-          </Row>
-        </ThemedView>
-        <ButtonRow
-          buttons={[
-            {
-              label: "Like",
-              onPress: () => {
-                /* handle like */
-              },
-            },
-          ]}
-        />
-      </Card>
+          </Card>
+        )}
+      />
     </ThemedView>
   );
 }
@@ -88,19 +78,21 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 8,
   },
-  container: {
-    gap: 8
+  card: {
+    gap: 8,
+    margin: 16
   },
   icon: {
-    marginRight: 8
+    marginRight: 8,
   },
   sectionHeading: {
-    borderTopWidth:1,
+    borderTopWidth: 1,
     paddingTop: 4,
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   tagContainer: {
-    gap: 4
-  }
+    gap: 4,
+  },
 });

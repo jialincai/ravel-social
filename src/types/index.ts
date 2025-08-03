@@ -2,6 +2,7 @@
 export type User = {
   id: string;
   email: string;
+  phone_number: string;
   display_name: string;
   created_at: string;
 };
@@ -39,9 +40,9 @@ export type Suggestion = {
   created_at: string;
   updated_at: string;
   tags: Tag[];
-  feedback: {
+  users: {
     user: User;
-    feedback: "like";
+    feedback: "like" | "dislike" | "pending";
     responded_at?: string;
   }[];
 };
@@ -49,13 +50,14 @@ export type Suggestion = {
 // src/types/event.ts
 export type Event = {
   id: string;
+  raw_text: string;
   scheduled_time: string;
   location: Location;
   created_at: string;
   updated_at: string;
-  invitees: {
+  users: {
     user: User;
-    status: "yes" | "maybe" | "no";
+    status: "yes" | "maybe" | "no" | "pending";
     responded_at?: string;
   }[];
 };
