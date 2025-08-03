@@ -28,6 +28,7 @@ const MAPPING = {
   "person.2.fill": "people",
   "square.on.square": "content-copy",
   "tag.fill": "label",
+  "trash.fill": "delete",
 } as IconMapping;
 
 /**

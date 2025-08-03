@@ -8,15 +8,21 @@ import {
   TextInputSubmitEditingEventData,
 } from "react-native";
 import { uuidv7 } from "uuidv7";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Input } from "@/types";
+import { dummyInputs } from "@/types/dummy/inputs";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
 import { ThemedSafeAreaView } from "@/components/ThemedSafeAreaView";
 import { Row } from "@/components/Row";
-import { Input } from "@/types";
+import { IconSymbol } from "@/components/ui/IconSymbol";
 
 export default function HomeScreen() {
+  const colorScheme = useColorScheme() ?? "light";
+
   const inputRef = useRef<TextInput>(null);
-  const [items, setItems] = useState<Input[]>([]);
+  const [items, setItems] = useState<Input[]>(dummyInputs);
 
   const handleSubmit = useCallback((raw_text: string) => {
     const text = raw_text.trim();
@@ -62,7 +68,12 @@ export default function HomeScreen() {
           <Row>
             <ThemedText style={styles.bullet}>• {item.raw_text}</ThemedText>
             <Pressable onPress={() => handleDelete(item.id)}>
-              <ThemedText style={styles.deleteButton}>✕</ThemedText>
+              <IconSymbol
+                name="trash.fill"
+                size={20}
+                color={Colors[colorScheme].icon}
+                style={styles.delete}
+              />
             </Pressable>
           </Row>
         )}
@@ -91,8 +102,7 @@ const styles = StyleSheet.create({
   bullet: {
     flex: 1,
   },
-  deleteButton: {
+  delete: {
     paddingHorizontal: 10,
-    color: "red",
   },
 });
