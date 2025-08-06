@@ -4,7 +4,7 @@ import { useFocusEffect } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Event } from "@/types";
-import { getEvents, updateEventStatus } from "@/types/dummy/eventsDb";
+import { getEvents, updateEventStatus } from "@/types/dummy/eventsAction";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";

@@ -1,0 +1,18 @@
+export const dummyTags = [
+  { id: "t1", name: "outdoors", created_at: "2025-07-01T00:00:00Z" },
+  { id: "t2", name: "picnic", created_at: "2025-07-01T00:00:00Z" },
+  { id: "t3", name: "exercise", created_at: "2025-07-02T00:00:00Z" },
+  { id: "t4", name: "art", created_at: "2025-07-10T00:00:00Z" },
+  { id: "t5", name: "coffee", created_at: "2025-07-11T00:00:00Z" },
+  { id: "t6", name: "brunch", created_at: "2025-07-12T00:00:00Z" },
+  { id: "t7", name: "games", created_at: "2025-07-13T00:00:00Z" },
+  { id: "t8", name: "karaoke", created_at: "2025-07-15T00:00:00Z" },
+  { id: "t9", name: "biking", created_at: "2025-07-16T00:00:00Z" },
+  { id: "t10", name: "dessert", created_at: "2025-07-23T00:00:00Z" },
+  { id: "t11", name: "photography", created_at: "2025-07-24T00:00:00Z" },
+  { id: "t12", name: "sunset", created_at: "2025-07-25T00:00:00Z" },
+  { id: "t13", name: "volunteering", created_at: "2025-07-30T00:00:00Z" },
+  { id: "t14", name: "cooking", created_at: "2025-07-31T00:00:00Z" },
+  { id: "t15", name: "museum", created_at: "2025-08-02T00:00:00Z" },
+  { id: "t16", name: "nightlife", created_at: "2025-08-03T00:00:00Z" },
+];
