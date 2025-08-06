@@ -1,39 +1,64 @@
+import { useCallback, useState } from "react";
 import { FlatList } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Event } from "@/types";
+import { getEvents, updateEventStatus } from "@/types/dummy/eventsDb";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
 import { Row } from "@/components/Row";
 import { Card } from "@/components/Card";
 import { ButtonRow } from "@/components/ButtonRow";
 import { ClipboardText } from "@/components/ClipboardText";
-import { dummyEvents } from "@/types/dummy/events";
-
-import { styles } from "@/app/(tabs)/inbox/index";
-
-// Helper: format date/time to "Saturday August 12, 12:00PM-3:00PM"
-function formatEventDate(isoString: string) {
-  const date = new Date(isoString);
-  return date.toLocaleString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
+import { styles, formatEventDate, CURRENT_USER_ID } from ".";
 
 export default function InviteScreen() {
   const colorScheme = useColorScheme() ?? "light";
+  const [events, setEvents] = useState<Event[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const allEvents = getEvents();
+      const filtered = allEvents.filter((event) =>
+        event.users.some(
+          (u) =>
+            u.user.id === CURRENT_USER_ID &&
+            (u.status === "pending" || u.status === "no"),
+        ),
+      );
+      setEvents(filtered);
+    }, []),
+  );
+
+  const handleStatusUpdate = (
+    eventId: string,
+    status: "yes" | "maybe" | "no",
+  ) => {
+    updateEventStatus(eventId, CURRENT_USER_ID, status);
+    const allEvents = getEvents();
+    const filtered = allEvents.filter((event) =>
+      event.users.some(
+        (u) =>
+          u.user.id === CURRENT_USER_ID &&
+          (u.status === "pending" || u.status === "no"),
+      ),
+    );
+    setEvents(filtered);
+  };
 
   return (
-    <ThemedView style={{flex:1}}>
+    <ThemedView style={{ flex: 1 }}>
       <FlatList
-        data={dummyEvents}
+        data={events}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
+          const currentUser = item.users.find(
+            (u) => u.user.id === CURRENT_USER_ID,
+          );
+          const currentStatus = currentUser?.status;
+
           return (
             <Card style={styles.card}>
               <ThemedView>
@@ -59,6 +84,7 @@ export default function InviteScreen() {
                   </ThemedText>
                 </Row>
               </ThemedView>
+
               <ThemedView>
                 <Row
                   style={[
@@ -76,25 +102,24 @@ export default function InviteScreen() {
                 </Row>
                 <ClipboardText invitees={item.users.map((u) => u.user)} />
               </ThemedView>
+
               <ButtonRow
+                selected={currentStatus}
                 buttons={[
                   {
+                    id: "yes",
                     label: "Yes",
-                    onPress: () => {
-                      // handle yes for item.id
-                    },
+                    onPress: () => handleStatusUpdate(item.id, "yes"),
                   },
                   {
+                    id: "maybe",
                     label: "Maybe",
-                    onPress: () => {
-                      // handle maybe for item.id
-                    },
+                    onPress: () => handleStatusUpdate(item.id, "maybe"),
                   },
                   {
+                    id: "no",
                     label: "No",
-                    onPress: () => {
-                      // handle no for item.id
-                    },
+                    onPress: () => handleStatusUpdate(item.id, "no"),
                   },
                 ]}
               />
