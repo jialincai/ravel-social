@@ -5,7 +5,12 @@ import { Row } from "@/components/Row";
 import { Colors } from "@/constants/Colors";
 
 export type ButtonRowProps = {
-  buttons: { label: string; onPress: () => void; style?: ViewStyle }[];
+  buttons: {
+    id: string;
+    label: string;
+    onPress: () => void;
+    style?: ViewStyle;
+  }[];
   selected?: string;
   style?: ViewStyle;
 };
@@ -16,33 +21,30 @@ export function ButtonRow({ buttons, selected, style }: ButtonRowProps) {
   return (
     <Row style={style}>
       {buttons.map((btn, idx) => {
-        const isSelected = btn.label === selected;
+        const isFirst = idx === 0;
+        const isLast = idx === buttons.length - 1;
+        const isSelected = btn.id === selected;
+        const backgroundColor = isSelected
+          ? Colors[colorScheme].text
+          : Colors[colorScheme].background;
+
+        const borderColor = isSelected
+          ? Colors[colorScheme].background
+          : Colors[colorScheme].text;
+
         return (
           <Pressable
             key={btn.label}
             onPress={btn.onPress}
             style={[
-              styles.segmentButton,
-              idx === 0 && styles.leftButton,
-              idx === buttons.length - 1 && styles.rightButton,
-              {
-                borderColor: Colors[colorScheme].text,
-                backgroundColor: isSelected
-                  ? Colors[colorScheme].text
-                  : Colors[colorScheme].background,
-              },
+              styles.button,
+              isFirst && styles.leftRadius,
+              isLast && styles.rightRadius,
+              { borderColor, backgroundColor },
               btn.style,
             ]}
           >
-            <ThemedText
-              style={{
-                color: isSelected
-                  ? Colors[colorScheme].background
-                  : Colors[colorScheme].text,
-              }}
-            >
-              {btn.label}
-            </ThemedText>
+            <ThemedText style={{ color: borderColor }}>{btn.label}</ThemedText>
           </Pressable>
         );
       })}
@@ -51,17 +53,17 @@ export function ButtonRow({ buttons, selected, style }: ButtonRowProps) {
 }
 
 const styles = StyleSheet.create({
-  segmentButton: {
+  button: {
     flex: 1,
     paddingVertical: 10,
     alignItems: "center",
     borderWidth: 1,
   },
-  leftButton: {
+  leftRadius: {
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
   },
-  rightButton: {
+  rightRadius: {
     borderTopRightRadius: 8,
     borderBottomRightRadius: 8,
   },
