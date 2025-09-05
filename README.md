@@ -4,11 +4,9 @@ A mobile app built with React Native using Expo. It prompts users to take photos
 
 ## PREREQUISITES
 
-1. Node.js
-1. git
-1. Expo Go (installed on your phone)
-1. Docker
-1. Docker Compose
+1. [Visual Studio Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)  
+1. [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)  
+1. [Expo Go](https://expo.dev/client) installed on your phone (iOS or Android)  
 
 ## Local Development Guide
 
@@ -16,20 +14,7 @@ A mobile app built with React Native using Expo. It prompts users to take photos
 
 1. Clone the project
 
-1. (Optional) Sign into your Expo organization in the Expo Go app (if using team features or accesing private projects)
-
-1. Install global Expo helpers
-
-   ```
-   npm install --global @expo/ngrok@^4.1.0
-   npm install --global eas-cli
-   ```
-
-1. (Optional) Initialize EAS project (if building remotely later)
-
-   ```
-   eas init --id <expo_project_id>
-   ```
+1. Open project in devcontainer. All subsequent commands should be executed within devcontainer.
 
 1. Install dependencies
 
@@ -43,9 +28,9 @@ A mobile app built with React Native using Expo. It prompts users to take photos
    npm run start:tunnel
    ```
 
-1. In the terminal, press s to switch to GO mode if needed
+1. In the terminal, press `s` to switch to Expo Go mode if prompted.
 
-1. Scan the QR code using the Expo Go app on your phone
+1. You should now see the QR code in your terminal. Scan it with the Expo Go app to load the app on your device.
 
 ### Running Local Database
 
